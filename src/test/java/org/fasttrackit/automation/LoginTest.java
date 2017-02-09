@@ -1,7 +1,6 @@
 package org.fasttrackit.automation;
 
 import com.sdl.selenium.web.utils.Utils;
-import org.apache.xpath.SourceTree;
 import org.fasttrackit.util.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -16,18 +15,19 @@ import static org.hamcrest.core.Is.is;
 
 public class LoginTest extends TestBase {
 
-    private LoginPage loginPage;
-
-    public LoginTest() {
-        loginPage = PageFactory.initElements(driver, LoginPage.class);
-    }
+    private LoginView page = new LoginView();
+//    private LoginPage page;
+//
+//    public LoginTest() {
+//        page = PageFactory.initElements(driver, LoginPage.class);
+//    }
 
 
     @Test
     public void validLoginTest() {
         openBrowser();
 
-        loginPage.login("eu@fast.com", "eu.pass");
+        page.login("eu@fast.com", "eu.pass");
 
         try {
             WebElement logoutBtn = driver.findElement(By.linkText("Logout"));
@@ -41,7 +41,7 @@ public class LoginTest extends TestBase {
     public void invalidPasswordTest() {
         openBrowser();
 
-        loginPage.login("eu@fast.com", "eu.pass123");
+        page.login("eu@fast.com", "eu.pass123");
 
         WebElement errorElement = driver.findElement(By.className("error-msg"));
         System.out.println(errorElement.getText());
@@ -50,26 +50,10 @@ public class LoginTest extends TestBase {
     }
 
     @Test
-    public void changePasswordWithInvalidCurrentPassword(){
-        openBrowser();
-        loginPage.login("eu@fast.com", "eu.pass");
-        WebElement preferencesBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
-        preferencesBtn.click();
-
-        WebElement currentPasswordField = driver.findElement(By.name("password"));
-        WebElement newPasswordField = driver.findElement(By.name("newPassword"));
-        WebElement repeatPasswordField = driver.findElement(By.name("newPasswordRepeat"));
-
-        currentPasswordField.sendKeys("wrong.pass");
-        newPasswordField.sendKeys("new.pass");
-        repeatPasswordField.sendKeys("new.pass");
-    }
-
-    @Test
     public void changePasswordWhitIntervalCurentPassword(){
         openBrowser();
         LoginTest loginPge;
-        loginPage.login("eu@fast.com","eu.pass");
+        page.login("eu@fast.com","eu.pass");
         WebElement preferenceBtn = driver.findElement(By.xpath("//button[@data-target='#preferences-win']"));
         preferenceBtn.click();
 
@@ -83,12 +67,6 @@ public class LoginTest extends TestBase {
         newPasswordField.sendKeys("new password");
         repeatPassword.sendKeys("new password");
 
-    }
-
-    private void openBrowser() {
-        System.out.println("ready");
-        driver.get("http://rawgit.com/sdl/Testy/master/src/test/functional/app-demo/login.html");
-        //driver.get("file:///C:/")
     }
 }
 
